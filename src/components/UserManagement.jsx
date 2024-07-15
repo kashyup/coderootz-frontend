@@ -3,8 +3,7 @@ import React, { useState, useEffect } from 'react';
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [selectedRoleId, setSelectedRoleId] = useState('');
-  const [selectedUserId, setSelectedUserId] = useState('');
+  const [selectedRoles, setSelectedRoles] = useState({});
 
   useEffect(() => {
     const fetchUsersAndRoles = async () => {
@@ -26,6 +25,13 @@ const UserManagement = () => {
         const rolesData = await rolesResponse.json();
         setUsers(usersData);
         setRoles(rolesData);
+
+        // Initialize selectedRoles state with current roles of users
+        const initialSelectedRoles = usersData.reduce((acc, user) => {
+          acc[user._id] = user.role ? user.role._id : '';
+          return acc;
+        }, {});
+        setSelectedRoles(initialSelectedRoles);
       } else {
         console.error('Failed to fetch users or roles');
       }
@@ -47,6 +53,10 @@ const UserManagement = () => {
     if (response.ok) {
       const updatedUser = await response.json();
       setUsers(prevUsers => prevUsers.map(user => user._id === userId ? updatedUser : user));
+      setSelectedRoles(prevSelectedRoles => ({
+        ...prevSelectedRoles,
+        [userId]: roleId
+      }));
     } else {
       console.error('Failed to update role');
     }
@@ -60,8 +70,11 @@ const UserManagement = () => {
         <ul>
           {users.map(user => (
             <li key={user._id}>
-              {user.username} - {user.role.name}
-              <select value={selectedRoleId} onChange={(e) => handleRoleChange(user._id, e.target.value)}>
+              {user.username} - {user?.role ? user?.role?.name : 'No Role'}
+              <select
+                value={selectedRoles[user._id] || ''}
+                onChange={(e) => handleRoleChange(user._id, e.target.value)}
+              >
                 <option value="">Select Role</option>
                 {roles.map(role => (
                   <option key={role._id} value={role._id}>{role.name}</option>

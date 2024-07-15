@@ -43,6 +43,7 @@ const Login = ({ onLogin }) => {
         />
         <button type="submit">Login</button>
       </form>
+      <p>Don't have an account? <a href="/signup">Signup here</a></p>
     </div>
   );
 };

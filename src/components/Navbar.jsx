@@ -18,12 +18,6 @@ const Navbar = ({ userRole, menus, handleLogout }) => {
         {menus.map(menu => (
           <li key={menu._id}><Link to={menu.path}>{menu.name}</Link></li>
         ))}
-        {userRole === 'Superadmin' && (
-          <>
-            <li><Link to="/user-management">User Management</Link></li>
-            <li><Link to="/role-management">Role Management</Link></li>
-          </>
-        )}
         <li><button onClick={handleLogout}>Logout</button></li>
       </ul>
     </nav>
