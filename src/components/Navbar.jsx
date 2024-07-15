@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-const Navbar = ({ userRole, menus }) => {
+const Navbar = ({ userRole, menus, handleLogout }) => {
   const [collapsed, setCollapsed] = useState(false);
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
 
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
@@ -24,6 +18,12 @@ const Navbar = ({ userRole, menus }) => {
         {menus.map(menu => (
           <li key={menu._id}><Link to={menu.path}>{menu.name}</Link></li>
         ))}
+        {userRole === 'Superadmin' && (
+          <>
+            <li><Link to="/user-management">User Management</Link></li>
+            <li><Link to="/role-management">Role Management</Link></li>
+          </>
+        )}
         <li><button onClick={handleLogout}>Logout</button></li>
       </ul>
     </nav>

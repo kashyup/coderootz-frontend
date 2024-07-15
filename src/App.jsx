@@ -26,11 +26,37 @@ const App = () => {
           setMenus(userData.menus);
           setIsAuthenticated(true);
         }
+      } else {
+        setUserRole(null);
+        setMenus([]);
+        setIsAuthenticated(false);
       }
     };
 
     fetchUserRoleAndMenus();
-  }, []); // Empty dependency array to ensure this runs only once on mount
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    setUserRole(null);
+    setMenus([]);
+  };
+
+  const handleLogin = async (token) => {
+    localStorage.setItem('token', token);
+    const response = await fetch('http://localhost:8080/api/auth/user', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (response.ok) {
+      const userData = await response.json();
+      setUserRole(userData.role.name);
+      setMenus(userData.menus);
+      setIsAuthenticated(true);
+    }
+  };
 
   const PrivateRoute = ({ children }) => {
     return isAuthenticated ? children : <Navigate to="/login" />;
@@ -40,10 +66,10 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/" element={
           <PrivateRoute>
-            <Home userRole={userRole} menus={menus} />
+            <Home userRole={userRole} menus={menus} handleLogout={handleLogout} />
           </PrivateRoute>
         } />
         <Route path="/user-management" element={

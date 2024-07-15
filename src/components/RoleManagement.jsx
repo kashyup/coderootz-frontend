@@ -22,10 +22,14 @@ const RoleManagement = () => {
           }
         })
       ]);
-      const rolesData = await rolesResponse.json();
-      const menusData = await menusResponse.json();
-      setRoles(rolesData);
-      setMenus(menusData);
+      if (rolesResponse.ok && menusResponse.ok) {
+        const rolesData = await rolesResponse.json();
+        const menusData = await menusResponse.json();
+        setRoles(rolesData);
+        setMenus(menusData);
+      } else {
+        console.error('Failed to fetch roles or menus');
+      }
     };
 
     fetchRolesAndMenus();
