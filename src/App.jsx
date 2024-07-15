@@ -5,7 +5,6 @@ import Login from './components/Login';
 import Home from './components/Home';
 import UserManagement from './components/UserManagement';
 import RoleManagement from './components/RoleManagement';
-import Navbar from './components/Navbar';
 
 const App = () => {
   const [userRole, setUserRole] = useState(null);
@@ -39,7 +38,6 @@ const App = () => {
 
   return (
     <Router>
-      {/* {isAuthenticated && <Navbar userRole={userRole} menus={menus} />} */}
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
