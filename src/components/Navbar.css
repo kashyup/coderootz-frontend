@@ -1,45 +1,60 @@
 .navbar {
-    width: 200px;
-    background: #f4f4f4;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .collapse-icon {
-    margin-bottom: 20px;
-    cursor: pointer;
-  }
-  span {
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .navbar ul {
-    list-style: none;
-    padding: 0;
-    width: 100%;
-  }
-  
-  .navbar ul li {
-    margin: 10px 0;
-  }
-  
-  .navbar ul li a, .navbar ul li button {
-    text-decoration: none;
-    color: #333;
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: none;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .navbar ul li a:hover, .navbar ul li button:hover {
-    background-color: #ddd;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 200px;
+  background: #f4f4f4;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: width 0.3s;
+}
+
+.navbar.collapsed {
+  width: 0px;
+}
+
+.collapse-icon {
+  margin-bottom: 20px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.navbar ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.navbar ul li {
+  margin: 10px 0;
+}
+
+.navbar ul li a, .navbar ul li button {
+  text-decoration: none;
+  color: #333;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.navbar ul li a:hover, .navbar ul li button:hover {
+  background-color: #ddd;
+}
+
+.navbar.collapsed ul li a, .navbar.collapsed ul li button {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.navbar.collapsed ul li a, .navbar.collapsed ul li button {
+  width: 100%;
+  padding: 10px 0;
+}

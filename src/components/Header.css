@@ -1,2 +1,22 @@
-
+.header {
+    background: #333;
+    color: #fff;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 200px;
+    transition: margin-left 0.3s;
+  }
+  
+  .navbar.collapsed + .header {
+    margin-left: 60px;
+  }
+  
+  .role-indicator {
+    background: #fff;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 50%;
+  }
   
