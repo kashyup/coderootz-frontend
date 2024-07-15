@@ -48,12 +48,12 @@ const App = () => {
         } />
         <Route path="/user-management" element={
           <PrivateRoute>
-            <UserManagement />
+            {userRole === 'Superadmin' ? <UserManagement /> : <Navigate to="/" />}
           </PrivateRoute>
         } />
         <Route path="/role-management" element={
           <PrivateRoute>
-            <RoleManagement />
+            {userRole === 'Superadmin' ? <RoleManagement /> : <Navigate to="/" />}
           </PrivateRoute>
         } />
       </Routes>
