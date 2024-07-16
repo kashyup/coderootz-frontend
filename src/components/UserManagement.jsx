@@ -29,7 +29,7 @@ const UserManagement = () => {
 
         // Initialize selectedRoles state with current roles of users
         const initialSelectedRoles = usersData.reduce((acc, user) => {
-          acc[user._id] = user.role ? user.role._id : '';
+          acc[user._id] = user.role ? user.role._id : rolesData[0]._id; // Default to the first role if no role is assigned
           return acc;
         }, {});
         setSelectedRoles(initialSelectedRoles);
@@ -42,6 +42,11 @@ const UserManagement = () => {
   }, []);
 
   const handleRoleChange = async (userId, roleId) => {
+    setSelectedRoles((prevSelectedRoles) => ({
+      ...prevSelectedRoles,
+      [userId]: roleId
+    }));
+
     const token = localStorage.getItem('token');
     const response = await fetch(`http://localhost:8080/api/users/${userId}/role`, {
       method: 'PUT',
@@ -59,12 +64,13 @@ const UserManagement = () => {
           user._id === userId ? { ...user, role: updatedUser.role } : user
         )
       );
-      setSelectedRoles((prevSelectedRoles) => ({
-        ...prevSelectedRoles,
-        [userId]: roleId
-      }));
     } else {
       console.error('Failed to update role');
+      // Revert the role selection if the update fails
+      setSelectedRoles((prevSelectedRoles) => ({
+        ...prevSelectedRoles,
+        [userId]: users.find((user) => user._id === userId).role._id
+      }));
     }
   };
 
@@ -76,12 +82,11 @@ const UserManagement = () => {
         <ul>
           {users.map((user) => (
             <li key={user._id}>
-              {user.username} - {user.role ? user.role.name : 'No Role'}
+              {user.username} - {roles.find(role => role._id === selectedRoles[user._id])?.name}
               <select
                 value={selectedRoles[user._id] || ''}
                 onChange={(e) => handleRoleChange(user._id, e.target.value)}
               >
-                <option value="">Select Role</option>
                 {roles.map((role) => (
                   <option key={role._id} value={role._id}>
                     {role.name}
