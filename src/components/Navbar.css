@@ -44,6 +44,14 @@
   cursor: pointer;
   border-radius: 4px;
 }
+/* Navbar.css */
+
+.navbar.collapsed ul li a.disabled {
+  pointer-events: none; /* Disable clicking */
+  color: #f0f0f0; /* Change the color to indicate disabled state */
+  cursor: default; /* Change cursor to default */
+}
+
 
 .navbar ul li a:hover, .navbar ul li button:hover {
   background-color: #ddd;

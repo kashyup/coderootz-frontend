@@ -16,7 +16,9 @@ const Navbar = ({ userRole, menus, handleLogout }) => {
       </div>
       <ul>
         {menus.map(menu => (
-          <li key={menu._id}><Link to={menu.path}>{menu.name}</Link></li>
+          <li key={menu._id}>
+            <Link to={menu.path} className={collapsed ? 'disabled' : ''}>{menu.name}</Link>
+          </li>
         ))}
         <li><button onClick={handleLogout}>Logout</button></li>
       </ul>
