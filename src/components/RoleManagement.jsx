@@ -40,29 +40,37 @@ const RoleManagement = () => {
     const method = editRoleId ? 'PUT' : 'POST';
     const url = editRoleId ? `http://localhost:8080/api/roles/${editRoleId}` : 'http://localhost:8080/api/roles';
 
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ name: roleName, menus: selectedMenus })
-    });
-
-    if (response.ok) {
-      const updatedRole = await response.json();
-      setRoles(prevRoles => {
-        if (editRoleId) {
-          return prevRoles.map(role => role._id === editRoleId ? updatedRole : role);
-        } else {
-          return [...prevRoles, updatedRole];
-        }
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ name: roleName, menus: selectedMenus })
       });
-      setRoleName('');
-      setSelectedMenus([]);
-      setEditRoleId(null);
-    } else {
-      console.error('Failed to create/update role');
+
+      if (response.ok) {
+        const updatedRole = await response.json();
+
+        // Update local state immediately with the updated role
+        if (editRoleId) {
+          // Update existing role
+          setRoles(prevRoles => prevRoles.map(role => role._id === updatedRole._id ? updatedRole : role));
+        } else {
+          // Add newly created role
+          setRoles(prevRoles => [...prevRoles, updatedRole]);
+        }
+
+        // Clear form fields after successful operation
+        setRoleName('');
+        setSelectedMenus([]);
+        setEditRoleId(null);
+      } else {
+        console.error('Failed to create/update role');
+      }
+    } catch (error) {
+      console.error('Error while creating/updating role:', error);
     }
   };
 

@@ -8,19 +8,22 @@ const Login = ({ onLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const loginDetails = { username, password };
+
     const response = await fetch('http://localhost:8080/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify(loginDetails)
     });
+
     if (response.ok) {
       const data = await response.json();
       onLogin(data.token);
       navigate('/');
     } else {
-      // Handle error
       alert('Login failed');
     }
   };

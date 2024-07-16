@@ -20,6 +20,7 @@ const UserManagement = () => {
           }
         })
       ]);
+
       if (usersResponse.ok && rolesResponse.ok) {
         const usersData = await usersResponse.json();
         const rolesData = await rolesResponse.json();
@@ -50,10 +51,15 @@ const UserManagement = () => {
       },
       body: JSON.stringify({ roleId })
     });
+
     if (response.ok) {
       const updatedUser = await response.json();
-      setUsers(prevUsers => prevUsers.map(user => user._id === userId ? updatedUser : user));
-      setSelectedRoles(prevSelectedRoles => ({
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, role: updatedUser.role } : user
+        )
+      );
+      setSelectedRoles((prevSelectedRoles) => ({
         ...prevSelectedRoles,
         [userId]: roleId
       }));
@@ -68,16 +74,18 @@ const UserManagement = () => {
       <div>
         <h2>Users</h2>
         <ul>
-          {users.map(user => (
+          {users.map((user) => (
             <li key={user._id}>
-              {user.username} - {user?.role ? user?.role?.name : 'No Role'}
+              {user.username} - {user.role ? user.role.name : 'No Role'}
               <select
                 value={selectedRoles[user._id] || ''}
                 onChange={(e) => handleRoleChange(user._id, e.target.value)}
               >
                 <option value="">Select Role</option>
-                {roles.map(role => (
-                  <option key={role._id} value={role._id}>{role.name}</option>
+                {roles.map((role) => (
+                  <option key={role._id} value={role._id}>
+                    {role.name}
+                  </option>
                 ))}
               </select>
             </li>
