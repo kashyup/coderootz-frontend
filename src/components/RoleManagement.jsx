@@ -6,6 +6,7 @@ const RoleManagement = () => {
   const [roleName, setRoleName] = useState('');
   const [selectedMenus, setSelectedMenus] = useState([]);
   const [editRoleId, setEditRoleId] = useState(null);
+  const [forceUpdate, setForceUpdate] = useState(false); // State to force re-render
 
   useEffect(() => {
     const fetchRolesAndMenus = async () => {
@@ -33,7 +34,7 @@ const RoleManagement = () => {
     };
 
     fetchRolesAndMenus();
-  }, []);
+  }, [forceUpdate]); // Dependency on forceUpdate to trigger re-fetching roles
 
   const handleCreateOrUpdateRole = async () => {
     const token = localStorage.getItem('token');
@@ -66,6 +67,9 @@ const RoleManagement = () => {
         setRoleName('');
         setSelectedMenus([]);
         setEditRoleId(null);
+
+        // Toggle forceUpdate to trigger re-render
+        setForceUpdate(prev => !prev);
       } else {
         console.error('Failed to create/update role');
       }
@@ -85,6 +89,9 @@ const RoleManagement = () => {
     setRoleName(role.name);
     setSelectedMenus(role.menus.map(menu => menu._id));
   };
+
+  // Optional: If you want to trigger re-fetching roles periodically or on other events,
+  // you can update forceUpdate state accordingly.
 
   return (
     <div>
